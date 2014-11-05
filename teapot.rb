@@ -26,7 +26,7 @@ define_generator "Library/C++/class" do |generator|
 			raise GeneratorError.new("You must specify a class name with a namespace!")
 		end
 		
-		directory = Pathname('source') + path.join('/')
+		directory = Files::Path.new('source') + path.join('/')
 		directory.mkpath
 		
 		name = Name.new(class_name)

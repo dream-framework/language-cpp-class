@@ -55,3 +55,6 @@ define_generator "class" do |generator|
 		generator.copy('templates/class', directory, substitutions)
 	end
 end
+
+define_configuration 'language-cpp-class' do
+end

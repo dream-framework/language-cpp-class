@@ -36,17 +36,22 @@ define_generator "Library/C++/class" do |generator|
 		substitutions['CLASS_NAME'] = name.identifier
 		substitutions['CLASS_FILE_NAME'] = name.identifier
 		
-		# e.g. FooBar, typically used as a namespace
+		# e.g. FooBar, typically used as a namespace.
 		substitutions['GUARD_NAME'] = name.macro(path) + '_H'
 		
-		# e.g. foo-bar, typically used for targets, executables
+		# e.g. foo-bar, typically used for targets, executables.
 		substitutions['NAMESPACE'] = scope_for_namespace(path)
 		
 		# The user's current name:
-		substitutions['AUTHOR_NAME'] = `git config --global user.name`.chomp!
+		substitutions['AUTHOR_NAME'] = context.metadata.user.name
 		
-		substitutions['PROJECT_NAME'] = context.project.name
-		substitutions['LICENSE'] = context.project.license
+		if context.project
+			substitutions['PROJECT_NAME'] = context.project.name
+			substitutions['LICENSE'] = context.project.license
+		else
+			substitutions['PROJECT_NAME'] = "Unnamed"
+			substitutions['LICENSE'] = "Unspecified License"
+		end
 		
 		current_date = Time.new
 		substitutions['DATE'] = current_date.strftime("%-d/%-m/%Y")

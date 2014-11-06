@@ -5,7 +5,7 @@
 
 teapot_version "1.0.0"
 
-define_generator "Library/C++/class" do |generator|
+define_generator "C++/Class" do |generator|
 	generator.description = <<-EOF
 		Generates a basic class file in the project.
 		

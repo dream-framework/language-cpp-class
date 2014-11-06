@@ -6,7 +6,7 @@
 //  Copyright, $YEAR, by $AUTHOR_NAME. All rights reserved.
 //
 
-#include "$CLASS_NAME.h"
+#include "$CLASS_NAME.hpp"
 
 <NAMESPACE>
 $CLASS_NAME::$CLASS_NAME()

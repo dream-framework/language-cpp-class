@@ -29,7 +29,7 @@ define_generator "C++/Class" do |generator|
 		directory = Files::Path.new('source') + path.join('/')
 		directory.mkpath
 		
-		name = Name.new(class_name)
+		name = Build::Name.new(class_name)
 		substitutions = Substitutions.new
 		
 		# e.g. Foo Bar, typically used as a title, directory, etc.

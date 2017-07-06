@@ -12,7 +12,7 @@ define_target "language-cpp-class" do |target|
 		usage: teapot generate class Namespace::ClassName
 	EOF
 	
-	target.depends "Generate/Copy"
+	target.depends "Generate/Template"
 	target.provides "Generate/C++/Class"
 	
 	def target.scope_for_namespace(namespace)
@@ -53,5 +53,5 @@ end
 define_configuration "language-cpp-class" do |configuration|
 	configuration.public!
 	
-	configuration.require "generators"
+	configuration.require "generate-template"
 end

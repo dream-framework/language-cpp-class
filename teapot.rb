@@ -3,34 +3,37 @@
 #  This file is part of the "Teapot" project, and is released under the MIT license.
 #
 
-teapot_version "1.0.0"
+teapot_version "2.0"
 
-define_generator "C++/Class" do |generator|
-	generator.description = <<-EOF
+define_target "language-cpp-class" do |target|
+	target.description = <<-EOF
 		Generates a basic class file in the project.
 		
 		usage: teapot generate class Namespace::ClassName
 	EOF
 	
-	def scope_for_namespace(namespace)
+	target.depends "Generate/Copy"
+	target.provides "Generate/C++/Class"
+	
+	def target.scope_for_namespace(namespace)
 		open = namespace.collect{|name| "namespace #{name}\n{\n"}
 		close = namespace.collect{ "}\n" }
 	
 		return open + close
 	end
 	
-	generator.generate do |class_name|
+	target.build do |class_name|
 		*path, class_name = class_name.split(/::/)
 		
 		if path == []
-			raise GeneratorError.new("You must specify a class name with a namespace!")
+			raise ArgumentError.new("You must specify a class name with a namespace!")
 		end
 		
 		directory = Files::Path.new('source') + path.join('/')
 		directory.mkpath
 		
 		name = Build::Name.new(class_name)
-		substitutions = Substitutions.new
+		substitutions = target.context.substitutions.dup
 		
 		# e.g. Foo Bar, typically used as a title, directory, etc.
 		substitutions['CLASS_NAME'] = name.identifier
@@ -40,26 +43,15 @@ define_generator "C++/Class" do |generator|
 		substitutions['GUARD_NAME'] = name.macro(path) + '_H'
 		
 		# e.g. foo-bar, typically used for targets, executables.
-		substitutions['NAMESPACE'] = scope_for_namespace(path)
+		substitutions['NAMESPACE'] = target.scope_for_namespace(path)
 		
-		# The user's current name:
-		substitutions['AUTHOR_NAME'] = context.metadata.user.name
-		
-		if context.project
-			substitutions['PROJECT_NAME'] = context.project.name
-			substitutions['LICENSE'] = context.project.license
-		else
-			substitutions['PROJECT_NAME'] = "Unnamed"
-			substitutions['LICENSE'] = "Unspecified License"
-		end
-		
-		current_date = Time.new
-		substitutions['DATE'] = current_date.strftime("%-d/%-m/%Y")
-		substitutions['YEAR'] = current_date.strftime("%Y")
-		
-		generator.copy('templates/class', directory, substitutions)
+		source_path = Build::Files::Directory.new(target.package.path + "templates/class")
+		generate source: source_path, prefix: directory, substitutions: substitutions
 	end
 end
 
-define_configuration 'language-cpp-class' do
+define_configuration "language-cpp-class" do |configuration|
+	configuration.public!
+	
+	configuration.require "generators"
 end

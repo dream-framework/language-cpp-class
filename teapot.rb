@@ -5,7 +5,7 @@
 
 teapot_version "2.0"
 
-define_target "language-cpp-class" do |target|
+define_target "generate-cpp-class" do |target|
 	target.description = <<-EOF
 		Generates a basic class file in the project.
 		

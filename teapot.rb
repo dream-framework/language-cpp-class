@@ -8,8 +8,8 @@ teapot_version "2.0"
 define_target "generate-cpp-class" do |target|
 	target.description = <<-EOF
 		Generates a basic class file in the project.
-		
-		usage: teapot generate class Namespace::ClassName
+
+		arguments: Namespace::ClassName
 	EOF
 	
 	target.depends "Generate/Template"
